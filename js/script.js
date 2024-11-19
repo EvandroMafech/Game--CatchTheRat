@@ -39,8 +39,7 @@ timer.innerHTML = currentTime - 1
 if(currentTime == 1){
 clearInterval(interval)
 timeOver = true
-}
-}, 1000)
+}}, 1000)
 }
 
 const initPosition = () => {
