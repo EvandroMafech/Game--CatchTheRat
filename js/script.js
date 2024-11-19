@@ -73,10 +73,10 @@ if((playerCat.position.x + playerCat.width - 2*playerCat.offsetImage) >= (player
 
     setTimeout(() => {
         
-        time.style.display = "none"
-        location.reload()
+      time.style.display = "none"
       endGame.style.display = "none"
       menu.style.display = "flex"
+      location.reload()
     }, 3000)
 }
 }
