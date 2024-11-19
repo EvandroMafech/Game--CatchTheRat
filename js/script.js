@@ -1,6 +1,6 @@
 import {  background_path_image, 
   cat_idle_path_image, 
-  rat_idle_path_image} from "./constants.js"
+  rat_idle_path_image } from "./constants.js"
 import obstacles from "./obstacles.js"
 import PlayerCat from "./PlayerCat.js"
 import PlayerRat from "./PlayerRat.js"
@@ -17,6 +17,9 @@ const imageRat = document.getElementById("gif-Rat")
 const timer = document.querySelector(".timer")
 const time = document.querySelector(".time")
 
+const playerCat = new PlayerCat(100,100,150,imageCat)//(x,y,size,imageElement)  
+const playerRat = new PlayerRat(1700,100,100,imageRat)//(x,y,size,imageElement) 
+
 const background = new Image()
 
 canvas.width = 1800
@@ -25,24 +28,35 @@ background.src = background_path_image
 endGame.style.display = "none"
 
 let timeOver = false
-let stopMoving = false
-
+let blockMovement = false
+let gameOver = false
 
 const startTimer = () => {
 
-  const interval = setInterval(() => {
-  const currentTime = +timer.innerHTML
-  timer.innerHTML = currentTime - 1
-  if(currentTime == 1){
-    clearInterval(interval)
-    timeOver = true
-  }
+const interval = setInterval(() => {
+const currentTime = +timer.innerHTML
+timer.innerHTML = currentTime - 1
+if(currentTime == 1){
+clearInterval(interval)
+timeOver = true
+}
 }, 1000)
 }
 
+const initPosition = () => {
+playerCat.position.x = 100
+playerCat.image.style.left = `${playerCat.position.x}px`
+playerCat.position.y = 100
+playerCat.image.style.top = `${playerCat.position.y}px`
+imageCat.src = cat_idle_path_image  
 
-const playerCat = new PlayerCat(100,100,150,imageCat)//(x,y,size,imageElement)  
-const playerRat = new PlayerRat(1700,100,100,imageRat)//(x,y,size,imageElement) 
+playerRat.position.x = 1700
+playerRat.image.style.left = `${playerRat.position.x}px`
+playerRat.position.y = 100
+playerRat.image.style.top = `${playerRat.position.y}px`
+imageRat.src = rat_idle_path_image  
+}
+
 
 const checkGameOver = () => {
 if((playerCat.position.x + playerCat.width - 2*playerCat.offsetImage) >= (playerRat.position.x + playerRat.offsetImage) && 
@@ -53,35 +67,40 @@ if((playerCat.position.x + playerCat.width - 2*playerCat.offsetImage) >= (player
 (timeOver == true))
 { 
 
-    stopMoving = true
-    playerCat.direction.left = false
-    playerCat.direction.right = false
-    playerRat.direction.left = false
-    playerRat.direction.right = false
-    playerRat.direction.jump = false      
-    playerCat.direction.jump = false
+blockMovement = true
+playerCat.direction.left = false
+playerCat.direction.right = false
+playerRat.direction.left = false
+playerRat.direction.right = false
+playerRat.direction.jump = false      
+playerCat.direction.jump = false
 
-    setTimeout(() => {
-       if(timeOver == false){
-        endGame.innerHTML = "Vitória para o GATO!"
-        endGame.style.display = "flex"
-       }else {
-         endGame.innerHTML = "Vitória para o RATO!"
-         endGame.style.display = "flex"
-       }
-    }, 800);
+if(!gameOver){
+gameOver = true
 
-    setTimeout(() => {
-        
-      time.style.display = "none"
-      endGame.style.display = "none"
-      menu.style.display = "flex"
-      location.reload()
-    }, 3000)
+setTimeout(() => {
+
+if(timeOver == false){
+endGame.innerHTML = "Vitória para o GATO!"
+endGame.style.display = "flex"
+}else{
+ endGame.innerHTML = "Vitória para o RATO!"
+ endGame.style.display = "flex"
 }
-}
+
+},800)
+
+setTimeout(() => {
+endGame.style.display = "none"
+time.style.display = "none"
+menu.style.display = "flex"
+initPosition()
+}, 2800)
+
+}}}
 
 const gameLoop = () => {
+
 ctx.clearRect(0,0,canvas.width,canvas.height) //apaga todo o canva
 ctx.drawImage(background,0,0)
 //obstacles.forEach(platform => (platform.draw(ctx)))    // desenha as areas de colisão na tela
@@ -92,6 +111,7 @@ playerCat.applyGravity()
 playerCat.checkFloor()
 playerRat.applyGravity()
 playerRat.checkFloor()
+
 
 if(playerCat.direction.left == true && playerCat.position.x >= canvas.offsetLeft - playerCat.offsetImage)                  playerCat.moveLeft()
 if(playerCat.direction.right == true && playerCat.position.x <= canvas.width - playerCat.offsetImage - canvas.offsetLeft)  playerCat.moveRight() 
@@ -111,7 +131,7 @@ gameLoop()
 window.addEventListener("keydown", (event) => {
 const key = event.key.toLocaleLowerCase() //médoto que faz ficar minusculo 
 
-if (menu.style.display === "none" && endGame.style.display === "none" && stopMoving == false) {
+if (menu.style.display === "none" && endGame.style.display === "none" && blockMovement == false) {
 if(key === "arrowleft")  playerCat.direction.left = true
 if(key === "arrowright") playerCat.direction.right = true
 if(key === "a")          playerRat.direction.left = true
@@ -124,32 +144,32 @@ if(key === "arrowup")      playerCat.direction.jump = true
 window.addEventListener("keyup", (event) => {
 const key = event.key.toLocaleLowerCase() //médoto que faz ficar minusculo 
 
-if (menu.style.display === "none" && endGame.style.display === "none" && stopMoving == false) {
+if (menu.style.display === "none" && endGame.style.display === "none" && blockMovement == false) {
 if(key === "arrowleft") { 
-    playerCat.direction.left = false 
-    playerCat.moving = false 
-    imageCat.src = cat_idle_path_image  
+playerCat.direction.left = false 
+playerCat.moving = false 
+imageCat.src = cat_idle_path_image  
 }
 if(key === "arrowright"){ 
-    playerCat.direction.right = false
-    playerCat.moving = false
-    imageCat.src = cat_idle_path_image  
- }    
+playerCat.direction.right = false
+playerCat.moving = false
+imageCat.src = cat_idle_path_image  
+}    
 if(key === "a"){
-    playerRat.direction.left = false
-    playerRat.moving = false
-    imageRat.src = rat_idle_path_image   
+playerRat.direction.left = false
+playerRat.moving = false
+imageRat.src = rat_idle_path_image   
 }      
 if(key === "d"){
-    playerRat.direction.right = false
-    playerRat.moving = false   
-    imageRat.src = rat_idle_path_image  
+playerRat.direction.right = false
+playerRat.moving = false   
+imageRat.src = rat_idle_path_image  
 }
 if(key === "arrowup"){
-    playerCat.direction.jump = false
+playerCat.direction.jump = false
 }
 if(key === "w"){
-    playerRat.direction.jump = false
+playerRat.direction.jump = false
 }
 }
 })
@@ -173,7 +193,8 @@ menu.style.display = "none"
 time.style.display = "flex"
 timer.innerHTML = 60
 timeOver = false
-stopMoving = false
+blockMovement = false
+gameOver = false
 startTimer() 
 })
 
