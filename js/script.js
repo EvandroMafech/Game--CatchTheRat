@@ -30,14 +30,16 @@ endGame.style.display = "none"
 let timeOver = false
 let blockMovement = false
 let gameOver = false
+let intervalId
 
 const startTimer = () => {
+clearInterval(intervalId);
 
-const interval = setInterval(() => {
+intervalId = setInterval(() => {
 const currentTime = +timer.innerHTML
 timer.innerHTML = currentTime - 1
-if(currentTime == 1 || gameOver){
-clearInterval(interval)
+if(currentTime <= 1 || gameOver){
+clearInterval(intervalId)
 timeOver = true
 }}, 1000)
 }
