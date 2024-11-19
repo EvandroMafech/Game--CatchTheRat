@@ -36,7 +36,7 @@ const startTimer = () => {
 const interval = setInterval(() => {
 const currentTime = +timer.innerHTML
 timer.innerHTML = currentTime - 1
-if(currentTime == 1){
+if(currentTime == 1 || gameOver){
 clearInterval(interval)
 timeOver = true
 }}, 1000)
