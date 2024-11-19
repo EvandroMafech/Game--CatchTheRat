@@ -10,7 +10,6 @@ function createPlatform(x, y, width, height) {
 //base
 createPlatform(0, 768, 1800, 20) //x, y, width, height
 
-
 //plataformas
 createPlatform(0, 240, 144, 20) //x, y, width, height
 createPlatform(480, 240, 144, 20) //x, y, width, height
@@ -31,8 +30,6 @@ createPlatform(529,385, 143, 20) //x, y, width, height
 createPlatform(817,384, 143, 20) //x, y, width, height
 createPlatform(961,529, 143, 20) //x, y, width, height
 createPlatform(481,625, 529, 20) //x, y, width, height
-
-
  
 export default obstacles
 

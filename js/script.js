@@ -38,9 +38,9 @@ clearInterval(intervalId);
 intervalId = setInterval(() => {
 const currentTime = +timer.innerHTML
 timer.innerHTML = currentTime - 1
-if(currentTime <= 1 || gameOver){
-clearInterval(intervalId)
-timeOver = true
+if(currentTime <= 1){
+  timeOver = true
+  clearInterval(intervalId)
 }}, 1000)
 }
 
